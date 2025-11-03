@@ -100,14 +100,14 @@ It stores the mapping between short codes and long URLs, along with timestamps.
 - When visiting the short link, the system redirects to the long URL or shows *Not Found*.
 
 ### 4.1 Mockup Description
-+--------------------------------------------------+
-URL Shortener Web App
-+--------------------------------------------------+
-[ Enter your long URL here.............. ]
-[ Shorten URL ]
-+--------------------------------------------------+
-Shortened URL: http://localhost:5000/abc123
-+--------------------------------------------------+
+- **+--------------------------------------------------+
+- **URL Shortener Web App
+- **+--------------------------------------------------+
+- **[ Enter your long URL here.............. ]
+- **[ Shorten URL ]
+- **+--------------------------------------------------+
+- **Shortened URL: http://localhost:5000/abc123
+- **+--------------------------------------------------+
 
 ### 4.2 UI/UX Guidelines
 - **Color Scheme:** Blue (Primary), White (Background), Gray (Neutral text)  
@@ -115,3 +115,4 @@ Shortened URL: http://localhost:5000/abc123
 - **Accessibility:** Large text, clear contrast, keyboard navigable  
 - **Responsiveness:** Layout adapts to mobile and desktop viewports  
 - **Usability Principle:** “One-click” shortening, clear feedback messages  
+
