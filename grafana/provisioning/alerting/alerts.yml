@@ -1,0 +1,99 @@
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: URL Shortener Alerts
+    folder: alerting
+    interval: 1m
+    rules:
+      - uid: high_404_rate
+        title: High 404 Error Rate
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: prometheus
+            model:
+              expr: rate(failed_lookups_total[1m])
+              refId: A
+          - refId: B
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: __expr__
+            model:
+              type: reduce
+              refId: B
+              expression: A
+              reducer: last
+          - refId: C
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: __expr__
+            model:
+              type: threshold
+              refId: C
+              expression: B
+              conditions:
+                - evaluator:
+                    params:
+                      - 0.5
+                    type: gt
+                  type: query
+        noDataState: NoData
+        execErrState: Alerting
+        for: 2m
+        annotations:
+          description: "404 error rate is {{ $value }} requests/second, which is above the threshold of 0.5 req/s"
+          summary: High rate of failed lookups detected
+        labels:
+          severity: warning
+          
+      - uid: high_latency
+        title: High Request Latency
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: prometheus
+            model:
+              expr: histogram_quantile(0.95, sum(rate(request_latency_seconds_bucket[5m])) by (le))
+              refId: A
+          - refId: B
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: __expr__
+            model:
+              type: reduce
+              refId: B
+              expression: A
+              reducer: last
+          - refId: C
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: __expr__
+            model:
+              type: threshold
+              refId: C
+              expression: B
+              conditions:
+                - evaluator:
+                    params:
+                      - 1
+                    type: gt
+                  type: query
+        noDataState: NoData
+        execErrState: Alerting
+        for: 5m
+        annotations:
+          description: "95th percentile latency is {{ $value }}s, exceeding 1 second threshold"
+          summary: Request latency is consistently high
+        labels:
+          severity: critical
